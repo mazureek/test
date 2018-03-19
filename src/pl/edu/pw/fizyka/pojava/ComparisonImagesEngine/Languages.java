@@ -18,10 +18,11 @@ public class Languages {
 		languageStrings [0][3] = "Pacjenci";
 		languageStrings [0][4] = "Pomoc";
 		languageStrings [0][5] = "Zakończ";
-		languageStrings[0][6] = "<html>Użytkownik może wybrać jedną z trzech opcji: funkcja masy, funkcja czasu oraz symulacja 2D,<br>"
-				+ " następnie musi nacisnąć przycisk start symulacji ( po prawej stronie ramki ukaże się wykres wybranej opcji<br>"
-				+ " bądź symulacja). Wybierając przycisk funkcja masy po prawej stronie ukaże się wykres zależności wydajności<br>"
-				+ " użytkownikowi zapisanie wykresu, który jest aktualnie wyświetlany po prawej stronie ramki, do pliku.</html>";
+		languageStrings[0][6] = " Przycisk 'Wczytaj obrazy' służy do wgrywania danych o pacjentach, czyli zdjęć oraz ich nazwisk. "
+				+ "'Analiza błędów przedstawi zależnoci błędów okrelenia ortocentrum dla poszczególnych pacjentów \n"
+				+ "'Analiza statystyczna' otworzy okno z rozkładem błędu oraz dystrybuantš empirycznš. \n"
+				+ "W polu 'Pacjenci' można wyszukiwać wczytanego już wczeniej pacjenta przez wpisanie jego danych \n"
+				+ "Pole 'Zakończ' konćzy pracę programu" ;
 		languageStrings [0][7] = "<html>Obiektem symulacji jest próbka, w której znajduje się N cząstek uranu235. Cząstka<br>"
 				+ " ulegająca rozpadowi emituje po jednej cząsteczce kryptonu92 i baru 141, oraz trzy neutrony. Neutrony<br>"
 				+ " poruszają się w losowych kierunkach, w przypadku zderzenia z cząsteczką uranu mają szansę B na spowodowanie<br>"
