@@ -67,7 +67,7 @@ ItemListener showPhotoItemListener =new ItemListener() {
 			photoFrame = new Photo();
 			photoFrame.setVisible(true);
 			photoFrame.setLocationRelativeTo(null);
-			photoFrame.setTitle(window.language.languageStrings[window.languageValue][1]);
+			photoFrame.setTitle(window.language.languageStrings[window.languageValue][9]);
 			}
 		
 		}
@@ -79,12 +79,12 @@ ActionListener showPhotoActionListener=new ActionListener() {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		for(int i=0; i<2 ; i++) {
-	
-		if(window.patientsList.getComponent(i).toString().equals(window.patientsTextField.getText())) {
+			System.out.println(window.patientsList.getComponent(i).toString());
+		if(window.patientsList.getItemAt(i).equals(window.patientsTextField.getText())) {
 			photoFrame = new Photo();
 			photoFrame.setVisible(true);
 			photoFrame.setLocationRelativeTo(null);
-			photoFrame.setTitle(window.language.languageStrings[window.languageValue][1]);
+			photoFrame.setTitle(window.language.languageStrings[window.languageValue][9]);
 			}
 		}
 	}

@@ -19,7 +19,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -27,27 +31,40 @@ import javax.swing.SwingConstants;
 public class MainWindow extends JFrame {
 
 	int fontSize=12;//rozmiar czcionki patientsTextField
+	int fontSizeButton=10;
+	int languageValue;
 	Photo photo;
+	OverlayOriginalPhotos overlayOriginalPhotos; 
+	OverlayChangedPhotos overlayChangedPhotos;
 	JFrame helpFrame;
 	JLabel helpDescription;
 	Languages language=new Languages();
 	JPanel plotPanel=new JPanel();
 	JPanel optionsPanel=new JPanel();
 	JPanel loadingFilesPanel=new JPanel();
+	JPanel approximationImagesPanel=new JPanel();
 	JPanel errorAnalysisPanel=new JPanel();
 	JPanel statisticalAnalysisPanel=new JPanel();
 	JPanel patientsPanel1=new JPanel();
 	JPanel patientsPanel2=new JPanel();
-	JPanel helpPanel=new JPanel();
+	JPanel sliderPanel=new JPanel();
 	JPanel exitPanel=new JPanel();
+	JButton approximationImagesButton;
 	JButton loadingFilesButton;
 	JButton errorAnalysisButton;
 	JButton statisticalAnalysisButton;
+	JSlider approximationImagesSlider;
+	JLabel sliderLabel;
 	JTextField patientsTextField;
 	JComboBox<String> patientsList;
-	JButton helpButton;
 	JButton exitButton;
-	int languageValue;
+	JMenu menu;
+	JMenuBar menuBar;
+	JMenuItem userOverlayPhotos;
+	JMenuItem symulationOverlayPhotos;
+	JMenuItem saveData;
+	JMenuItem help;
+	
 
 	
 	
@@ -97,7 +114,7 @@ public class MainWindow extends JFrame {
 				helpFrame = new Help();
 				helpFrame.setVisible(true);
 				helpFrame.setLocationRelativeTo(null);
-				helpFrame.setTitle(language.languageStrings[languageValue][9]);
+				helpFrame.setTitle(language.languageStrings[languageValue][8]);
 			}
 		}
 
@@ -111,29 +128,53 @@ public class MainWindow extends JFrame {
 	public MainWindow(int languageValue) throws HeadlessException {
 		photo=new Photo();
 		photo.window=this;
+		overlayOriginalPhotos=new OverlayOriginalPhotos();
+		overlayOriginalPhotos.window=this;
+		overlayChangedPhotos=new OverlayChangedPhotos();
+		overlayChangedPhotos.window=this;
 		setSize(1000, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 		this.languageValue = languageValue;
-		this.setTitle(language.languageStrings[languageValue][8]);
+		this.setTitle(language.languageStrings[languageValue][7]);
 		
+		menu=new JMenu(language.languageStrings[languageValue][12]);//  JEZYK!!!
+		userOverlayPhotos=new JMenuItem(language.languageStrings[languageValue][14]); // JEZYK
+		userOverlayPhotos.addActionListener(overlayOriginalPhotos.showOverlayOriginalPhotosListener);
+		symulationOverlayPhotos=new JMenuItem(language.languageStrings[languageValue][13]); // JEZYK
+		saveData=new JMenuItem(language.languageStrings[languageValue][15]);//JEZYK
+		help=new JMenuItem(language.languageStrings[languageValue][4]);
+		menu.add(symulationOverlayPhotos);
+		menu.add(userOverlayPhotos);
+		menu.add(saveData);
+		menu.add(help);
+		menuBar=new JMenuBar();
+		menuBar.add(menu);
+		this.setJMenuBar(menuBar);
 		
 		loadingFilesButton=new JButton(language.languageStrings[languageValue][0]);
+		loadingFilesButton.setPreferredSize(new Dimension(160,30));
 		errorAnalysisButton=new JButton(language.languageStrings[languageValue][1]);
+		errorAnalysisButton.setPreferredSize(new Dimension(160,30));
 		statisticalAnalysisButton=new JButton(language.languageStrings[languageValue][2]);
+		statisticalAnalysisButton.setPreferredSize(new Dimension(160,30));
 		patientsTextField=new JTextField(language.languageStrings[languageValue][3]);
 		patientsTextField.setFont(new Font(language.languageStrings[languageValue][3], Font.ITALIC, 18));
 		patientsTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		patientsTextField.setPreferredSize(new Dimension(160,30));
 		patientsList=new JComboBox<>();
+		approximationImagesSlider=new JSlider();
+		approximationImagesButton=new JButton(language.languageStrings[languageValue][10]);//JEZYK
+		approximationImagesButton.setPreferredSize(new Dimension(160,30));
+		sliderLabel=new JLabel(language.languageStrings[languageValue][11]);// JEZYK
 		patientsList.addItem("Joanna Gajewska");
 		patientsList.addItem("Adam Kowalczyk");
 		patientsList.addItem("Jan Kowalski");
 		patientsList.addItemListener(photo.showPhotoItemListener);
 		patientsTextField.addActionListener(photo.showPhotoActionListener);
-		patientsList.setPreferredSize(new Dimension(140, 30));
-	
-		helpButton=new JButton(language.languageStrings[languageValue][4]);
+		patientsList.setPreferredSize(new Dimension(160, 30));
 		exitButton=new JButton(language.languageStrings[languageValue][5]);
+		exitButton.setPreferredSize(new Dimension(160,30));
 		exitButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -142,7 +183,9 @@ public class MainWindow extends JFrame {
 				System.exit(0);
 			}
 		});
-		helpButton.addActionListener(showHelpListener);
+		
+		
+		help.addActionListener(showHelpListener);
 		loadingFilesPanel.setLayout(new FlowLayout());
 		loadingFilesPanel.add(loadingFilesButton);
 		errorAnalysisPanel.setLayout(new FlowLayout());
@@ -155,23 +198,30 @@ public class MainWindow extends JFrame {
 		patientsPanel2.setLayout(new FlowLayout());
 		patientsPanel2.add(patientsList);
 		
-		helpPanel.setLayout(new FlowLayout());
-		helpPanel.add(helpButton);
+		approximationImagesPanel.setLayout(new FlowLayout());
+		approximationImagesPanel.add(approximationImagesButton);
+		sliderPanel.setLayout(new FlowLayout());
+		sliderPanel.add(approximationImagesSlider);
+		sliderPanel.add(sliderLabel);
 		exitPanel.setLayout(new FlowLayout());
 		exitPanel.add(exitButton);
-		optionsPanel.setLayout(new GridLayout(7, 1));
+		optionsPanel.setLayout(new GridLayout(8, 1));
 		optionsPanel.add(loadingFilesPanel);
-		optionsPanel.add(errorAnalysisPanel);
+		optionsPanel.add(approximationImagesPanel);
+		optionsPanel.add(sliderPanel);
 		optionsPanel.add(statisticalAnalysisPanel);
+		optionsPanel.add(errorAnalysisPanel);
 		optionsPanel.add(patientsPanel1);
 		optionsPanel.add(patientsPanel2);
-		optionsPanel.add(helpPanel);
 		optionsPanel.add(exitPanel);
+		optionsPanel.setPreferredSize(new Dimension(250,800));
+		
 		plotPanel.setBackground(Color.cyan);
 		optionsPanel.setBorder(BorderFactory.createBevelBorder(0));// wypukły panel
 		setLocationRelativeTo(null);//ustawia na środek ekranu
 		this.add(optionsPanel, BorderLayout.WEST);
 		this.add(plotPanel, BorderLayout.CENTER);
+		this.setPreferredSize(new Dimension(800,800));
 		
 		
 		setLocationRelativeTo(null);
